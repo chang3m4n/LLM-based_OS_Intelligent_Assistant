@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b5ef218c-350d-4a46-8af5-67f06de8fc7a" name="更改" comment="7.25 submit">
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-118/README.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-118/adapter_config.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-118/adapter_model.safetensors" beforeDir="false" />
@@ -73,15 +70,9 @@
       <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-88/scheduler.pt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-88/trainer_state.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-88/training_args.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/deepseek_lora_adapter/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/adapter_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/deepseek_lora_adapter/adapter_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/adapter_model.bin" beforeDir="false" afterPath="$PROJECT_DIR$/deepseek_lora_adapter/adapter_model.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/tokenizer.json" beforeDir="false" afterPath="$PROJECT_DIR$/deepseek_lora_adapter/tokenizer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/tokenizer_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/deepseek_lora_adapter/tokenizer_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inference.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,7 +173,39 @@
       <option name="project" value="LOCAL" />
       <updated>1753433176497</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="7.25 submit">
+      <option name="closed" value="true" />
+      <created>1758944818424</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1758944818424</updated>
+    </task>
+    <task id="LOCAL-00004" summary="7.25 submit">
+      <option name="closed" value="true" />
+      <created>1758945012026</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1758945012026</updated>
+    </task>
+    <task id="LOCAL-00005" summary="7.25 submit">
+      <option name="closed" value="true" />
+      <created>1758945104171</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1758945104171</updated>
+    </task>
+    <task id="LOCAL-00006" summary="7.25 submit">
+      <option name="closed" value="true" />
+      <created>1758958656850</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1758958656850</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
