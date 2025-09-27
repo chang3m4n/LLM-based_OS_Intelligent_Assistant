@@ -4,86 +4,119 @@ from transformers import (
     AutoTokenizer,
     Trainer,
     TrainingArguments,
-    BitsAndBytesConfig
+    BitsAndBytesConfig,
+    DataCollatorForLanguageModeling
 )
-from peft import LoraConfig, get_peft_model
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from datasets import load_dataset
 import torch
+import os
+from datetime import datetime
 
-# 1. 加载 DeepSeek 模型和分词器
-# model_name = "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"  # 或 "deepseek-ai/deepseek-llm-7b-base"
-# model_name = "deepseek-ai/deepseek-llm-7b-base"
-model_name = "Qwen/Qwen2.5-7B-Instruct"
+# 1. 加载模型和分词器
+model_name = "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
+cache_dir = "/data/models"
+output_dir = "./finetune_results"
 
-cache_dir = "../models"
-# 关键修复：设置右侧填充，确保有效文本靠左
+# 创建输出目录
+os.makedirs(output_dir, exist_ok=True)
+
+# 初始化分词器
 tokenizer = AutoTokenizer.from_pretrained(
     model_name,
     cache_dir=cache_dir,
-    padding_side="right"  # 右侧填充，避免有效文本被挤压到右侧
+    padding_side="right",
+    trust_remote_code=True
 )
-# 补充pad_token（DeepSeek模型默认可能没有pad_token）
 if tokenizer.pad_token is None:
-    tokenizer.pad_token = tokenizer.eos_token  # 用EOS token作为填充标记
+    tokenizer.pad_token = tokenizer.eos_token
 
-# 量化配置（节省显存）
+# 量化配置（24G显卡适用）
 bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,  # 4-bit 量化
+    load_in_4bit=True,  # 4bit量化释放显存，保障训练稳定性
     bnb_4bit_use_double_quant=True,
-    bnb_4bit_quant_type="nf4",
+    bnb_4bit_quant_type="nf4",  # 高精度量化格式，效果损失极小
     bnb_4bit_compute_dtype=torch.float16
 )
 
+# 加载模型
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
-    quantization_config=bnb_config,  # 应用4-bit量化
-    device_map="auto",  # 自动分配GPU/CPU
-    trust_remote_code=True,  # DeepSeek 需要此参数
+    quantization_config=bnb_config,
+    device_map="auto",
+    trust_remote_code=True,
     cache_dir=cache_dir
 )
 
-# 2. 配置LoRA适配器
+# 准备模型用于量化训练
+model = prepare_model_for_kbit_training(model)
+
+# 2. 配置LoRA（单卡优化参数）
 peft_config = LoraConfig(
-    r=8,
+    r=16,  # 适中的秩，平衡效果和计算量
     lora_alpha=32,
-    target_modules=["q_proj", "k_proj", "v_proj"],
-    lora_dropout=0.1,
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
+    lora_dropout=0.05,
     task_type="CAUSAL_LM",
     bias="none"
 )
+
 model = get_peft_model(model, peft_config)
-# ...（前面的导入和模型加载代码保持不变）
+model.print_trainable_parameters()  # 打印可训练参数占比
 
-# 3. 加载数据集并划分训练/验证集
-dataset = load_dataset("json", data_files="data/train1.json")
-dataset = dataset["train"].train_test_split(test_size=0.1)  # 90%训练，10%验证
+# 3. 加载数据集
+dataset = load_dataset("json", data_files="/data/training_data/train1.json")  # 替换为你的数据路径
+dataset = dataset["train"].train_test_split(test_size=0.1)  # 划分训练/验证集
 
 
-# 4. 优化后的数据预处理函数
+# 4. 数据预处理
 def tokenize_function(examples):
-    texts = [f"Instruction: {q}\nOutput: {a}" for q, a in zip(examples["question"], examples["answer"])]
+    # 从messages列表中提取user的问题和assistant的回答
+    questions = []
+    answers = []
+    for msg_list in examples["messages"]:
+        # 遍历单条数据的messages，分离user和assistant内容
+        user_content = ""
+        assistant_content = ""
+        for msg in msg_list:
+            if msg["role"] == "user":
+                user_content = msg["content"].strip()  # 提取用户问题
+            elif msg["role"] == "assistant":
+                assistant_content = msg["content"].strip()  # 提取助手回答
+
+        # 过滤无效样本（缺少问题或回答）
+        if user_content and assistant_content:
+            questions.append(user_content)
+            answers.append(assistant_content)
+        else:
+            # 打印无效样本提示（可选，用于数据校验）
+            print(f"跳过无效样本：缺少user/assistant内容 | messages: {msg_list[:50]}...")
+
+    # 沿用原有的"Instruction-Output"格式
+    texts = [f"Instruction: {q}\nOutput: {a}" for q, a in zip(questions, answers)]
+
+    # 分词处理（与原逻辑一致）
     tokenized = tokenizer(
         texts,
         truncation=True,
-        max_length=512,
+        max_length=1024,  # 24G显卡可支持的长度
         padding="max_length",
-        add_special_tokens=False
+        add_special_tokens=True
     )
 
+    # 构建标签（忽略Instruction部分，仅对Output计算损失）
     labels = []
     for input_ids in tokenized["input_ids"]:
-        # 先解码为文本再查找关键词位置
         text = tokenizer.decode(input_ids, skip_special_tokens=True)
         output_pos = text.find("Output:")
 
         if output_pos >= 0:
-            # 计算关键词前的token长度
-            prefix_text = text[:output_pos + len("Output:")]
-            prefix_tokens = tokenizer.encode(prefix_text, add_special_tokens=False)
-            label = [-100] * len(prefix_tokens) + input_ids[len(prefix_tokens):]
+            # 计算"Output:"前的前缀长度，用-100标记（不参与损失计算）
+            prefix = text[:output_pos + len("Output:")]
+            prefix_ids = tokenizer.encode(prefix, add_special_tokens=False)
+            label = [-100] * len(prefix_ids) + input_ids[len(prefix_ids):]
         else:
-            print(f"警告：未匹配到Output前缀 | 样本: {text[:50]}...")
-            label = input_ids.copy()  # 回退方案
+            label = input_ids.copy()  # 回退方案（极少触发）
 
         labels.append(label)
 
@@ -91,47 +124,65 @@ def tokenize_function(examples):
     return tokenized
 
 
-# 应用预处理（同时处理训练和验证集）
-print("开始预处理数据集...")
+# --------------------------------------------------------------------------------
+
+
+# 应用预处理
 tokenized_datasets = dataset.map(
     tokenize_function,
     batched=True,
     remove_columns=dataset["train"].column_names,
-    desc="Tokenizing dataset"
+    num_proc=4  # 适配服务器CPU核心数
 )
 
-# 5. 训练配置（添加验证相关参数）
+# 数据整理器
+data_collator = DataCollatorForLanguageModeling(
+    tokenizer=tokenizer,
+    mlm=False  # 因果语言模型不需要掩码语言建模
+)
+
+# 5. 训练配置
 training_args = TrainingArguments(
-    output_dir="./deepseek_fine_tuned",
-    per_device_train_batch_size=1,
-    per_device_eval_batch_size=1,
-    gradient_accumulation_steps=4,
-    learning_rate=1e-5,
+    output_dir=output_dir,
+    # 批次设置
+    per_device_train_batch_size=4,
+    per_device_eval_batch_size=4,
+    gradient_accumulation_steps=2,  # 累计梯度，模拟更大批次
+    # 学习率与轮次
+    learning_rate=2e-5,
     num_train_epochs=10,
-    eval_strategy="epoch",  # 每个epoch后评估 #evaluation_strategy
-    fp16=True if torch.cuda.is_available() else False,
-    logging_steps=1,
-    warmup_ratio=0.1,              # 10%步数用于学习率热身
-    weight_decay=0.01,
+    # 评估策略
+    eval_strategy="epoch",
+    # 混合精度
+    fp16=True,  # 启用FP16加速
+    # 日志与保存
+    logging_dir=f"{output_dir}/logs",
+    logging_steps=20,
     save_strategy="epoch",
-    load_best_model_at_end=True,  # 训练结束时加载最佳模型
-    metric_for_best_model="eval_loss", # 根据验证损失选择最佳模型
-    label_names=["labels"]
+    save_total_limit=2,  # 只保留2个最佳模型
+    # 优化器
+    optim="paged_adamw_8bit",  # 节省内存的优化器
+    lr_scheduler_type="cosine",
+    warmup_ratio=0.1,
+    weight_decay=0.01,
+    # 加载最佳模型
+    load_best_model_at_end=True,
+    metric_for_best_model="eval_loss"
 )
 
-# 6. 训练模型（添加验证集）
+# 6. 启动训练
 trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=tokenized_datasets["train"],
-    eval_dataset=tokenized_datasets["test"],  # 添加验证集
+    eval_dataset=tokenized_datasets["test"],
+    data_collator=data_collator
 )
 
-# 训练并评估
 print("开始训练...")
 trainer.train()
 
-# 7. 保存模型（保持不变）
-model.save_pretrained("./deepseek_lora_adapter")
-tokenizer.save_pretrained("./deepseek_lora_adapter")
-print(f"模型已保存至 ./deepseek_lora_adapter")
+# 7. 保存模型
+model.save_pretrained(f"{output_dir}/lora_adapter")
+tokenizer.save_pretrained(f"{output_dir}/lora_adapter")
+print(f"模型已保存至 {output_dir}/lora_adapter")
