@@ -15,7 +15,7 @@ from datetime import datetime
 
 # 1. 加载模型和分词器
 model_name = "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
-cache_dir = "/data/models"
+cache_dir = "../models"
 output_dir = "./finetune_results"
 
 # 创建输出目录
@@ -65,7 +65,7 @@ model = get_peft_model(model, peft_config)
 model.print_trainable_parameters()  # 打印可训练参数占比
 
 # 3. 加载数据集
-dataset = load_dataset("json", data_files="/data/training_data/train1.json")  # 替换为你的数据路径
+dataset = load_dataset("json", data_files="../data/output.jsonl")  # 替换为你的数据路径
 dataset = dataset["train"].train_test_split(test_size=0.1)  # 划分训练/验证集
 
 
