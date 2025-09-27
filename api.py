@@ -36,7 +36,7 @@ def get_api_answer(messages, max_tokens=2048, temperature=0.7):
 if __name__ == '__main__':
     # 测试代码
     test_messages = [
-        {"role": "system", "content": "你是操作系统课程智能问答助手；你的名字是小维；你只能回答和操作系统知识有关的问题；用户如果问和操作系统无关的问题，你要回答暂不支持此功能；你的回答语气要活泼"},
+        {"role": "system", "content": "你是操作系统课程智能问答助手；你的名字是比艾特；你只能回答和操作系统知识有关的问题；用户如果问和操作系统无关的问题，你要回答暂不支持此功能；你的回答语气要活泼"},
         {"role": "user", "content": "什么是进程？"}
     ]
     try:
