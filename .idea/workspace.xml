@@ -4,44 +4,94 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b5ef218c-350d-4a46-8af5-67f06de8fc7a" name="更改" comment="本次提交包含DeepSeek模型微调训练的基础实现&#10;&#10;核心代码：&#10;- 新增训练主程序 train.py：实现数据加载、模型初始化、LoRA微调逻辑&#10;- 推理脚本 inference.py：支持加载训练后的adapter模型进行预测&#10;- 模型配置文件 model.py：定义模型结构及微调参数&#10;- 主入口 main.py：整合训练/推理流程，支持命令行参数配置&#10;&#10;训练相关文件：&#10;- 保存3个训练 checkpoint（checkpoint-1/2/3）：包含adapter权重、优化器状态、训练参数&#10;- LoRA适配器最终权重：deepseek_lora_adapter/ 目录下的adapter_model.bin及配置文件&#10;- 训练数据集：data/train.json 基础训练数据&#10;&#10;主要功能:&#10;1. 基于Hugging Face Transformers库构建&#10;2. 支持DeepSeek系列模型加载与微调&#10;3. 包含数据预处理、模型训练流程&#10;5. 基础推理功能和模型保存功能">
-      <change beforePath="$PROJECT_DIR$/.idea/OSassistant.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OSassistant.iml" afterDir="false" />
+    <list default="true" id="b5ef218c-350d-4a46-8af5-67f06de8fc7a" name="更改" comment="7.25 submit">
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/train.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-1/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-1/adapter_config.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-1/adapter_model.safetensors" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-1/optimizer.pt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-1/rng_state.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-1/scheduler.pt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-1/trainer_state.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-1/training_args.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-2/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-2/adapter_config.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-2/adapter_model.safetensors" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-2/optimizer.pt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-2/rng_state.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-2/scheduler.pt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-2/trainer_state.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-2/training_args.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-3/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-3/adapter_config.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-3/adapter_model.safetensors" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-3/optimizer.pt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-3/rng_state.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-3/scheduler.pt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-3/trainer_state.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-3/training_args.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/adapter_config.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/adapter_model.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-118/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-118/adapter_config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-118/adapter_model.safetensors" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-118/optimizer.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-118/rng_state.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-118/scheduler.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-118/trainer_state.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-118/training_args.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-147/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-147/adapter_config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-147/adapter_model.safetensors" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-147/optimizer.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-147/rng_state.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-147/scheduler.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-147/trainer_state.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-147/training_args.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-177/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-177/adapter_config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-177/adapter_model.safetensors" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-177/optimizer.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-177/rng_state.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-177/scheduler.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-177/trainer_state.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-177/training_args.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-206/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-206/adapter_config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-206/adapter_model.safetensors" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-206/optimizer.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-206/rng_state.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-206/scheduler.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-206/trainer_state.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-206/training_args.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-232/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-232/adapter_config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-232/adapter_model.safetensors" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-232/optimizer.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-232/rng_state.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-232/scheduler.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-232/trainer_state.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-232/training_args.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-29/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-29/adapter_config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-29/adapter_model.safetensors" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-29/optimizer.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-29/rng_state.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-29/scheduler.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-29/trainer_state.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-29/training_args.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-59/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-59/adapter_config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-59/adapter_model.safetensors" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-59/optimizer.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-59/rng_state.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-59/scheduler.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-59/trainer_state.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-59/training_args.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-88/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-88/adapter_config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-88/adapter_model.safetensors" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-88/optimizer.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-88/rng_state.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-88/scheduler.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-88/trainer_state.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_fine_tuned/checkpoint-88/training_args.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/deepseek_lora_adapter/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/adapter_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/deepseek_lora_adapter/adapter_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/adapter_model.bin" beforeDir="false" afterPath="$PROJECT_DIR$/deepseek_lora_adapter/adapter_model.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/tokenizer.json" beforeDir="false" afterPath="$PROJECT_DIR$/deepseek_lora_adapter/tokenizer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deepseek_lora_adapter/tokenizer_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/deepseek_lora_adapter/tokenizer_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inference.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/train.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -68,21 +118,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.dataset.executor": "Run",
-    "Python.inference.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.model.executor": "Run",
-    "Python.test.executor": "Run",
-    "Python.train.executor": "Run",
-    "Python.train1.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "settings.editor.selected.configurable": "project.propVCSSupport.CommitDialog"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.api.executor&quot;: &quot;Run&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dataset.executor&quot;: &quot;Run&quot;,
+    &quot;Python.inference.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.model.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.train.executor&quot;: &quot;Run&quot;,
+    &quot;Python.train1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.trans.executor&quot;: &quot;Run&quot;,
+    &quot;Python.web_api.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/17551/.ssh/id_rsa&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Pycharm\project\OSassistant\src" />
+      <recent name="D:\Pycharm\project\OSassistant\data" />
+      <recent name="D:\Pycharm\project\OSassistant\web" />
+      <recent name="D:\Pycharm\project\OSassistant\web\templates" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -91,6 +154,10 @@
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\17551\AppData\Roaming\Subversion</configuration>
+    <option name="sshPrivateKeyPath" value="C:\Users\17551\.ssh\id_rsa" />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
       <changelist id="b5ef218c-350d-4a46-8af5-67f06de8fc7a" name="更改" comment="" />
@@ -107,11 +174,31 @@
       <option name="project" value="LOCAL" />
       <updated>1752992710473</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="7.25 submit">
+      <option name="closed" value="true" />
+      <created>1753433176497</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1753433176497</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="本次提交包含DeepSeek模型微调训练的基础实现&#10;&#10;核心代码：&#10;- 新增训练主程序 train.py：实现数据加载、模型初始化、LoRA微调逻辑&#10;- 推理脚本 inference.py：支持加载训练后的adapter模型进行预测&#10;- 模型配置文件 model.py：定义模型结构及微调参数&#10;- 主入口 main.py：整合训练/推理流程，支持命令行参数配置&#10;&#10;训练相关文件：&#10;- 保存3个训练 checkpoint（checkpoint-1/2/3）：包含adapter权重、优化器状态、训练参数&#10;- LoRA适配器最终权重：deepseek_lora_adapter/ 目录下的adapter_model.bin及配置文件&#10;- 训练数据集：data/train.json 基础训练数据&#10;&#10;主要功能:&#10;1. 基于Hugging Face Transformers库构建&#10;2. 支持DeepSeek系列模型加载与微调&#10;3. 包含数据预处理、模型训练流程&#10;5. 基础推理功能和模型保存功能" />
-    <option name="LAST_COMMIT_MESSAGE" value="本次提交包含DeepSeek模型微调训练的基础实现&#10;&#10;核心代码：&#10;- 新增训练主程序 train.py：实现数据加载、模型初始化、LoRA微调逻辑&#10;- 推理脚本 inference.py：支持加载训练后的adapter模型进行预测&#10;- 模型配置文件 model.py：定义模型结构及微调参数&#10;- 主入口 main.py：整合训练/推理流程，支持命令行参数配置&#10;&#10;训练相关文件：&#10;- 保存3个训练 checkpoint（checkpoint-1/2/3）：包含adapter权重、优化器状态、训练参数&#10;- LoRA适配器最终权重：deepseek_lora_adapter/ 目录下的adapter_model.bin及配置文件&#10;- 训练数据集：data/train.json 基础训练数据&#10;&#10;主要功能:&#10;1. 基于Hugging Face Transformers库构建&#10;2. 支持DeepSeek系列模型加载与微调&#10;3. 包含数据预处理、模型训练流程&#10;5. 基础推理功能和模型保存功能" />
+    <MESSAGE value="7.25 submit" />
+    <option name="LAST_COMMIT_MESSAGE" value="7.25 submit" />
   </component>
 </project>

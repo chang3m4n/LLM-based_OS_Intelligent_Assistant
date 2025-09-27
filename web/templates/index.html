@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>操作系统智能问答助手 - 比艾特</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: #4facfe;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            overflow-y: auto;
+            flex-shrink: 0;
+            transition: width 0.3s ease;
+            position: relative; /* Add relative positioning */
+        }
+
+        .sidebar.collapsed {
+            width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            top: 50%;
+            left: 280px; /* Start at the edge of the open sidebar */
+            transform: translateY(-50%);
+            width: 25px;
+            height: 60px;
+            background: #4facfe;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 2px;
+        }
+
+        .sidebar-toggle:hover {
+            background: #3d8bfe;
+        }
+
+        .sidebar-toggle.collapsed {
+            left: 0; /* Move to the edge when collapsed */
+        }
+
+        .chat-panel {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #ffffff;
+            min-height: 0;
+        }
+
+        .sidebar-content {
+            padding: 20px;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 20px;
+            color: #495057;
+            font-size: 1.1em;
+            border-bottom: 2px solid #4facfe;
+            padding-bottom: 8px;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+        }
+
+        .slider-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4facfe;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4facfe;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .value-display {
+            text-align: center;
+            font-weight: 600;
+            color: #4facfe;
+            font-size: 1.1em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .chat-container {
+            flex: 1;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            min-height: 0; /* 允许flex子元素缩小 */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            max-width: 90%;
+            word-wrap: break-word;
+            line-height: 1.4;
+            min-height: auto;
+            height: auto;
+            display: inline-block;
+            width: auto;
+            min-width: 60px;
+        }
+
+        .user-message {
+            background: #4facfe;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+            float: right;
+            clear: both;
+        }
+
+        .assistant-message {
+            background: white;
+            color: #333;
+            border: 1px solid #e9ecef;
+            float: left;
+            clear: both;
+        }
+
+        .system-message,
+        .search-links-message {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+            text-align: center;
+            font-style: italic;
+            display: block;
+            width: 100%;
+            clear: both;
+            float: none;
+            max-width: 100%;
+        }
+
+        .search-links-message {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            text-align: left;
+            font-style: normal;
+            padding: 12px 16px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .web-search-btn {
+            padding: 12px 16px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s;
+        }
+
+        .web-search-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .web-search-btn.active {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .send-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .reset-btn {
+            width: 100%;
+            padding: 12px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .reset-btn:hover {
+            background: #5a6268;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: 200px;
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+            
+            .chat-panel {
+                min-height: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 比艾特 - 操作系统智能问答助手</h1>
+        </div>
+        
+        <div class="main-content">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" id="sidebarToggle">‹</button>
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-content">
+                    <h3>参数设置</h3>
+                    
+                    <div class="control-group">
+                        <label for="maxTokens">最大令牌数 (Max Tokens)</label>
+                        <div class="slider-container">
+                            <input type="range" id="maxTokens" class="slider" min="100" max="4096" value="2048" step="100">
+                        </div>
+                        <div class="value-display" id="maxTokensValue">2048</div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="temperature">Temperature</label>
+                        <div class="slider-container">
+                            <input type="range" id="temperature" class="slider" min="0.1" max="2.0" value="0.7" step="0.01">
+                        </div>
+                        <div class="value-display" id="temperatureValue">0.70</div>
+                    </div>
+
+                    <button class="reset-btn" onclick="resetParameters()">重置参数</button>
+                </div>
+            </div>
+
+            <div class="chat-panel">
+                <div class="chat-container" id="chatContainer">
+                    <div class="message assistant-message">
+                        你好！我是操作系统课程智能问答助手比艾特，很高兴为您服务！请问有什么操作系统相关的问题需要我帮助解答吗？😊
+                    </div>
+                </div>
+                
+                <div class="loading" id="loading">比艾特正在思考中...</div>
+                
+                <div class="input-area">
+                    <input type="text" id="userInput" placeholder="请输入您的问题..." onkeypress="handleKeyPress(event)">
+                    <button class="web-search-btn" onclick="toggleWebSearch()" id="webSearchBtn" title="启用网络检索">🌐</button>
+                    <button class="send-btn" onclick="sendMessage()" id="sendBtn">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 参数值更新
+        document.getElementById('maxTokens').addEventListener('input', function() {
+            document.getElementById('maxTokensValue').textContent = this.value;
+        });
+
+        document.getElementById('temperature').addEventListener('input', function() {
+            document.getElementById('temperatureValue').textContent = parseFloat(this.value).toFixed(2);
+        });
+
+        // 网络检索状态
+        let webSearchEnabled = false;
+        
+        // 侧边栏状态
+        let sidebarCollapsed = false;
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面初始化完成
+        });
+
+        // 重置参数
+        function resetParameters() {
+            document.getElementById('maxTokens').value = 2048;
+            document.getElementById('temperature').value = 0.7;
+            
+            document.getElementById('maxTokensValue').textContent = '2048';
+            document.getElementById('temperatureValue').textContent = '0.70';
+        }
+
+        // 切换网络检索状态
+        function toggleWebSearch() {
+            webSearchEnabled = !webSearchEnabled;
+            const btn = document.getElementById('webSearchBtn');
+            if (webSearchEnabled) {
+                btn.classList.add('active');
+                btn.title = '网络检索已启用 - 将基于搜索结果回答';
+                // 添加提示消息
+                addMessage('网络搜索模式已启用！以下回答将基于搜索结果', 'system');
+            } else {
+                btn.classList.remove('active');
+                btn.title = '启用网络检索';
+                // 添加提示消息
+                addMessage('已切换到本地知识库模式，将基于训练数据回答问题', 'system');
+            }
+        }
+
+        // 切换侧边栏显示/隐藏
+        function toggleSidebar() {
+            sidebarCollapsed = !sidebarCollapsed;
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.getElementById('sidebarToggle');
+            
+            if (sidebarCollapsed) {
+                sidebar.classList.add('collapsed');
+                toggle.classList.add('collapsed');
+                toggle.textContent = '›';
+                toggle.title = '显示参数设置';
+            } else {
+                sidebar.classList.remove('collapsed');
+                toggle.classList.remove('collapsed');
+                toggle.textContent = '‹';
+                toggle.title = '隐藏参数设置';
+            }
+        }
+
+        // 处理回车键
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // 发送消息
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const message = userInput.value.trim();
+            
+            if (!message) return;
+
+            // 添加用户消息到聊天界面
+            addMessage(message, 'user');
+            userInput.value = '';
+
+            // 显示加载状态
+            const loading = document.getElementById('loading');
+            const sendBtn = document.getElementById('sendBtn');
+            loading.style.display = 'block';
+            sendBtn.disabled = true;
+
+            try {
+                // 获取当前参数值
+                const maxTokens = parseInt(document.getElementById('maxTokens').value);
+                const temperature = parseFloat(document.getElementById('temperature').value);
+
+                // 调用API
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        max_tokens: maxTokens,
+                        temperature: temperature,
+                        enable_web_search: webSearchEnabled
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('网络请求失败');
+                }
+
+                const data = await response.json();
+                addMessage(data.response, 'assistant');
+                
+                // 如果有搜索链接，显示链接
+                if (data.search_links && data.search_links.length > 0) {
+                    showSearchLinks(data.search_links);
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('抱歉，发生了错误，请稍后重试。', 'assistant');
+            } finally {
+                loading.style.display = 'none';
+                sendBtn.disabled = false;
+            }
+        }
+
+        // 添加消息到聊天界面
+        function addMessage(content, sender) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            
+            // 根据发送者类型设置不同的样式
+            if (sender === 'system') {
+                messageDiv.className = 'message system-message';
+            } else {
+                messageDiv.className = `message ${sender}-message`;
+            }
+            
+            // 直接显示内容，不添加名称前缀
+            messageDiv.innerHTML = content;
+            
+            chatContainer.appendChild(messageDiv);
+            
+            // 滚动到底部
+            setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 50);
+        }
+
+
+        // 显示搜索链接
+        function showSearchLinks(links) {
+            const chatContainer = document.getElementById('chatContainer');
+            const linksDiv = document.createElement('div');
+            linksDiv.className = 'message search-links-message';
+            
+            let linksHTML = '<strong>🔍 搜索到的相关链接：</strong><br><br>';
+            links.forEach((link, index) => {
+                linksHTML += `<div style="margin-bottom: 8px;">
+                    <a href="${link.url}" target="_blank" style="color: #1976d2; text-decoration: none; font-weight: 600;">
+                        ${index + 1}. ${link.title}
+                    </a>
+                    <br>
+                    <small style="color: #666; margin-left: 20px;">${link.snippet}</small>
+                </div>`;
+            });
+            
+            linksDiv.innerHTML = linksHTML;
+            chatContainer.appendChild(linksDiv);
+            
+            // 滚动到底部
+            setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 50);
+        }
+    </script>
+</body>
+</html>
