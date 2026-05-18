@@ -48,8 +48,8 @@ def convert_to_jsonl(input_file, output_file):
 if __name__ == "__main__":
     # 设置命令行参数
     parser = argparse.ArgumentParser(description='将包含question和answer的JSON文件转换为符合要求的JSONL文件')
-    parser.add_argument('input', help='data/train.json')
-    parser.add_argument('output', help='data/output.jsonl')
+    parser.add_argument('input', help='../data/train.json')
+    parser.add_argument('output', help='../data/output.jsonl')
 
     args = parser.parse_args()
 
