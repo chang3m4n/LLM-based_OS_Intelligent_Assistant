@@ -4,19 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b5ef218c-350d-4a46-8af5-67f06de8fc7a" name="更改" comment="7.25 submit">
-      <change beforePath="$PROJECT_DIR$/.idea/OSassistant.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OSassistant.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="b5ef218c-350d-4a46-8af5-67f06de8fc7a" name="更改" comment="5.18 submit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output.jsonl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/train1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/inference.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trans.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/trans.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,7 +188,23 @@
       <option name="project" value="LOCAL" />
       <updated>1758969328766</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="5.18 submit">
+      <option name="closed" value="true" />
+      <created>1779114662704</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1779114662704</updated>
+    </task>
+    <task id="LOCAL-00011" summary="5.18 submit">
+      <option name="closed" value="true" />
+      <created>1779114710768</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1779114710768</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -216,6 +221,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="本次提交包含DeepSeek模型微调训练的基础实现&#10;&#10;核心代码：&#10;- 新增训练主程序 train.py：实现数据加载、模型初始化、LoRA微调逻辑&#10;- 推理脚本 inference.py：支持加载训练后的adapter模型进行预测&#10;- 模型配置文件 model.py：定义模型结构及微调参数&#10;- 主入口 main.py：整合训练/推理流程，支持命令行参数配置&#10;&#10;训练相关文件：&#10;- 保存3个训练 checkpoint（checkpoint-1/2/3）：包含adapter权重、优化器状态、训练参数&#10;- LoRA适配器最终权重：deepseek_lora_adapter/ 目录下的adapter_model.bin及配置文件&#10;- 训练数据集：data/train.json 基础训练数据&#10;&#10;主要功能:&#10;1. 基于Hugging Face Transformers库构建&#10;2. 支持DeepSeek系列模型加载与微调&#10;3. 包含数据预处理、模型训练流程&#10;5. 基础推理功能和模型保存功能" />
     <MESSAGE value="7.25 submit" />
-    <option name="LAST_COMMIT_MESSAGE" value="7.25 submit" />
+    <MESSAGE value="5.18 submit" />
+    <option name="LAST_COMMIT_MESSAGE" value="5.18 submit" />
   </component>
 </project>
